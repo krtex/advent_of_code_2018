@@ -1,16 +1,12 @@
 from sys import argv
 
 def compareTwoLines(first, second):
-    differences = 0
     result = ""
+    for c1, c2 in zip(first, second):
+        if c1 == c2:
+            result += c1
 
-    for i, c in enumerate(first):
-        if c != second[i]:
-            differences += 1
-        else:
-            result += c
-
-    return result if differences < 2 else False
+    return result if len(result) + 1 >= len(first) else False
 
 def main(pathToFile):
     with open(pathToFile) as f:
