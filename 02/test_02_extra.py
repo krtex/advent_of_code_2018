@@ -10,7 +10,7 @@ def test_oneLetterDifference_returnCommon():
     assert "asd" == compareTwoLines("asdf", "asde")
 
 def test_oneLetterDifferenceDifferentOrder_returnCommon():
-    assert "asd" == compareTwoLines("asdf", "edsa")
+    assert False == compareTwoLines("asdf", "edsa")
 
 def test_twoLetterDifference_returnFalse():
     assert False == compareTwoLines("asdf", "asqw")

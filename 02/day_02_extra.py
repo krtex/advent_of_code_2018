@@ -1,14 +1,16 @@
 from sys import argv
 
 def compareTwoLines(first, second):
-    f = set(first)
-    s = set(second)
+    differences = 0
+    result = ""
 
-    f.intersection_update(s)
+    for i, c in enumerate(first):
+        if c != second[i]:
+            differences += 1
+        else:
+            result += c
 
-    if len(f) == len(s) or len(f)+1 == len(s):
-        return ''.join(sorted(str(c) for c in f))
-    return False
+    return result if differences < 2 else False
 
 def main(pathToFile):
     with open(pathToFile) as f:
@@ -18,7 +20,7 @@ def main(pathToFile):
         for line2 in lines[i+1:]:
             result = compareTwoLines(line1, line2)
             if result != False:
-                result
+                return result
 
 if __name__ == "__main__":
     _, input = argv
