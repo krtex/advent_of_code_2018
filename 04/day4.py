@@ -19,13 +19,27 @@ def get_sleep(data, idx):
 def add_sleep(schedule, guard, sleep_time, wake_time):
     timetable = np.zeros(60)
     timetable[sleep_time:wake_time] = 1
-    #print("Timetable", guard, "guard\n", schedule)
     if guard in schedule:
         schedule[guard] += timetable
-        return schedule[guard]
     else:
         schedule[guard] = timetable
-        return schedule[guard]
+
+def find_best_time(schedule):
+    best = ("", -1)
+
+    for g in schedule:
+        temp = max(schedule[g])
+        if temp > best[1]:
+            best = (g, temp)
+    print(best)
+    return best
+
+def calculate_best_shift_and_time(schedule, best):
+    for i, elem in enumerate(schedule[best[0]]):
+        print(i, elem)
+        if elem == best[1]:
+            return i * int(best[0])
+    return False
 
 def main(input_file):
     data = open(input_file).readlines()
@@ -34,15 +48,17 @@ def main(input_file):
 
     i = 0
     while i < len(data)-2:
-        guard = find_guard(data[i])
-        print("Guard:", guard, "in", i)
+        g = find_guard(data[i])
+        if False != g:
+            guard = g
+            i += 1
         if not find_guard(data[i+1]):
-            i, sleep_time, wake_time = get_sleep(data, i+1)
-            schedule = add_sleep(schedule, guard, sleep_time, wake_time)
+            i, sleep_time, wake_time = get_sleep(data, i)
+            add_sleep(schedule, guard, sleep_time, wake_time)
         else:
             i += 1
 
-    print(schedule)
+    print(calculate_best_shift_and_time(schedule, find_best_time(schedule)))
 
 if __name__ == ("__main__"):
-    main("input_short")
+    main("test_random")

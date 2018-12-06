@@ -28,7 +28,12 @@ def test_parse_wakeup_return_time():
     result = day4.get_goodnight_time("[1518-11-01 00:55] wakes up", "wakes up")
     assert 55 == result
 
-# def test_find_guard():
-#     arr = np.array([np.zeros(2),np.zeros(2)])
-#     arr[1,1] = 1
-#     assert 1 == int(np.where(arr[1,:] == 1)))
+def test_given_array_return_key_with_max_value():
+    schedule = {
+        "1"  : [1, 2, 3, 4],
+        "20" : [5, 6, 7, 8]
+    }
+    best = day4.find_best_time(schedule)
+    assert ("20", 8) == best
+    assert 60 == day4.calculate_best_shift_and_time(schedule, best)
+
