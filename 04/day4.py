@@ -31,13 +31,29 @@ def find_best_time(schedule):
         temp = max(schedule[g])
         if temp > best[1]:
             best = (g, temp)
-    print(best)
     return best
+
+def find_better_time(schedule):
+    best = ("", -1)
+
+    for g in schedule:
+        temp = sum(schedule[g])
+        if temp > best[1]:
+            best = (g, temp)
+    return best
+
 
 def calculate_best_shift_and_time(schedule, best):
     for i, elem in enumerate(schedule[best[0]]):
-        print(i, elem)
         if elem == best[1]:
+            return i * int(best[0])
+    return False
+
+def calculate_better_shift_and_time(schedule, best):
+    temp = max(schedule[best[0]])
+    for i, elem in enumerate(schedule[best[0]]):
+        if elem == temp:
+            print(i, best[0])
             return i * int(best[0])
     return False
 
@@ -58,7 +74,8 @@ def main(input_file):
         else:
             i += 1
 
-    print(calculate_best_shift_and_time(schedule, find_best_time(schedule)))
+    print(schedule)
+    print(calculate_better_shift_and_time(schedule, find_better_time(schedule)))
 
 if __name__ == ("__main__"):
-    main("test_random")
+    main("input")
