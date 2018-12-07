@@ -28,5 +28,5 @@ def test_dataFormPage_resultFromPage_lol():
     assert "dabCBAcaDA" == trigger_polymer("dabAcCaCBAcCcaDA")
     assert 10 == len(trigger_polymer("dabAcCaCBAcCcaDA"))
 
-def test_test():
-    assert "dabCBAcaDabCBAcaDA" == trigger_polymer("dabAcCaCBAcCcaDAaabAcCaCBAcCcaDA")
+def test_removing_letter_A_case_insensitively():
+    assert "dbcCCBcCcD" == remove_unit("a", "dabAcCaCBAcCcaDA")

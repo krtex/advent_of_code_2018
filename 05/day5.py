@@ -1,3 +1,6 @@
+import re
+from string import ascii_lowercase
+
 def trigger_polymer(polymer):
     if polymer:
         i = 0
@@ -12,8 +15,22 @@ def trigger_polymer(polymer):
         return polymer
     return ""
 
+def remove_unit(unit, polymer):
+    insensitive_unit = re.compile(re.escape(unit), re.IGNORECASE)
+    return insensitive_unit.sub("", polymer)
+
 def main(inputFile):
-    print("Part 1:", len(trigger_polymer(open(inputFile).readline().strip())))
+    polymer = open(inputFile).readline().strip()
+
+    shortest = len(trigger_polymer(polymer))
+    print("Part 1:", shortest)
+
+
+    for c in ascii_lowercase:
+        temp = len(trigger_polymer(remove_unit(c, polymer)))
+        if temp < shortest:
+            shortest = temp
+    print("Part 2:", shortest)
 
 if __name__ == "__main__":
     main("input")
