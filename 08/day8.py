@@ -41,11 +41,36 @@ def get_root_value(input):
     my_length = HEADER + ch_length + data
     return my_length, my_value
 
+def parts_1_2(input):
+    children, data = input[:HEADER]
+    ch_length = 0
+    ch_sum = 0
+    ch_values = []
+
+    for i in range(children):
+        cl, cs, cv= parts_1_2(input[HEADER + ch_length:])
+        ch_length += cl
+        ch_sum += cs
+        ch_values.append(cv)
+
+    my_length = HEADER + ch_length + data
+    my_sum = sum_scope(input[HEADER + ch_length : HEADER + ch_length + data]) + ch_sum
+    my_value = 0
+
+    if len(ch_values):
+        for v in input[HEADER + ch_length : HEADER + ch_length + data]:
+            if v-1 <  len(ch_values):
+                my_value += ch_values[v-1]
+    else:
+        my_value = sum_scope(input[HEADER:HEADER + data])
+
+    return my_length, my_sum, my_value
 
 def main(inputFile):
     input = list(map(int, open(inputFile).readline().strip().split(' ')))
-    print("Part 1", sum_metadata(input))
-    print("Part 2", get_root_value(input))
+    #print("Part 1", sum_metadata(input))
+    #print("Part 2", get_root_value(input))
+    print(parts_1_2(input))
 
 if __name__ == "__main__":
     main("input")
