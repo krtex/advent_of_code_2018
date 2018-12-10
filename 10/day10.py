@@ -16,9 +16,6 @@ def main():
         points.append(pos)
         velocities.append(vel)
 
-    for i, p in enumerate(points):
-        p += velocities[i]*2
-
     arr = np.array(points)
     max_x = max(arr[:,0])
     min_x = min(arr[:,0])
@@ -27,11 +24,26 @@ def main():
 
     if(min_x < 0): arr[:,0] -= min_x
     if(min_y < 0): arr[:,1] -= min_y
-    picture = np.zeros((max_x +abs(min_x) + 1, max_y +abs(min_y) + 1))
+
+    size_x = max_x +abs(min_x) + 1
+    size_y = max_y +abs(min_y) + 1
+    picture = np.zeros((size_x, size_y))
 
     for p in arr:
         picture[p[0], p[1]] = 1
-    scipy.misc.imsave('outfile.jpg', picture)
+    print("\n",picture)
+
+    for i in range(1,5):
+        for i, p in enumerate(points):
+            p += velocities[i] * i
+
+        arr = np.array(points)
+        arr[:,0] -= min_x
+        arr[:,1] -= min_y
+        picture = np.zeros((size_x, size_y))
+        for p in arr:
+            picture[p[0], p[1]] = 1
+        print("\n",picture)
 
 if __name__ == "__main__":
     main()
