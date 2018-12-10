@@ -3,7 +3,7 @@ import re
 import scipy.misc
 
 def parse_input(line):
-        result = re.search(r"(-?\d+), *(-?\d+)(> velocity=<) *(-?\d+), *(-?\d+)", line) #", *(-?\d+)", line)
+        result = re.search(r"(-?\d+), *(-?\d+)(> velocity=<) *(-?\d+), *(-?\d+)", line)
         pos = [int(result.group(1)),  int(result.group(2))]
         vel = [int(result.group(4)),  int(result.group(5))]
         return pos, vel
@@ -32,18 +32,14 @@ def fill_the_sky(sky, points):
         sky[p[1], p[0]] = 1
 
 def main():
-    pts, vels = create_points_and_velocities("input")
-    normalize_points(pts)
-
-    pts += 10000*vels
-    sky = create_sky(pts)
-    fill_the_sky(sky, pts)
-
-    print(sky)
-
-#    print(pts)
-#    scipy.misc.imsave(name, picture)
-
+    points, vels = create_points_and_velocities("input")
+    points += 10080*vels # based on input size;)
+    for i in range(10):  # some int to iterate:P
+        points += vels
+        normalize_points(points)
+        sky = create_sky(points)
+        fill_the_sky(sky, points)
+        scipy.misc.imsave("sky{}.jpg".format(i), sky)
 
 if __name__ == "__main__":
     main()
