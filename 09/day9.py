@@ -1,7 +1,7 @@
 from collections import deque
 import time
 
-def part1(players, marbles):
+def part12(players, marbles):
     score_table = [0] * players
     circle = deque([0])
     for i in range(1, marbles + 1):
