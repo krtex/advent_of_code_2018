@@ -4,46 +4,46 @@ import scipy.misc
 
 def parse_input(line):
         result = re.search(r"(-?\d+), *(-?\d+)(> velocity=<) *(-?\d+), *(-?\d+)", line) #", *(-?\d+)", line)
-        pos = int(result.group(1)),  int(result.group(2))
-        vel = int(result.group(4)),  int(result.group(5))
+        pos = [int(result.group(1)),  int(result.group(2))]
+        vel = [int(result.group(4)),  int(result.group(5))]
         return pos, vel
 
-def main():
-    points = []
-    velocities = []
-    for line in open("input_test").readlines():
+def create_points_and_velocities(inputFile):
+    lines = open(inputFile).readlines()
+    points = np.zeros(shape=(len(lines), 2))
+    velocities = np.zeros(shape=(len(lines), 2))
+    for i, line in enumerate(lines):
         pos, vel = parse_input(line)
-        points.append(pos)
-        velocities.append(vel)
+        points[i] = pos
+        velocities[i] = vel
+    return points.astype(int), velocities.astype(int)
 
-    arr = np.array(points)
-    max_x = max(arr[:,0])
-    min_x = min(arr[:,0])
-    max_y = max(arr[:,1])
-    min_y = min(arr[:,1])
+def normalize_points(points):
+    points[:,0] -= min(points[:,0])
+    points[:,1] -= min(points[:,1])
 
-    if(min_x < 0): arr[:,0] -= min_x
-    if(min_y < 0): arr[:,1] -= min_y
+def create_sky(points):
+    # indexes are fine, they're swap in a story, so i do the same here
+    return np.zeros(shape=(int(max(points[:,1])) + 1, int(max(points[:,0])) + 1)).astype(int)
 
-    size_x = max_x +abs(min_x) + 1
-    size_y = max_y +abs(min_y) + 1
-    picture = np.zeros((size_x, size_y))
+def fill_the_sky(sky, points):
+    # indexes are fine, they're swap in a story, so i do the same here
+    for p in points:
+        sky[p[1], p[0]] = 1
 
-    for p in arr:
-        picture[p[0], p[1]] = 1
-    print("\n",picture)
+def main():
+    pts, vels = create_points_and_velocities("input")
+    normalize_points(pts)
 
-    for i in range(1,5):
-        for i, p in enumerate(points):
-            p += velocities[i] * i
+    pts += 10000*vels
+    sky = create_sky(pts)
+    fill_the_sky(sky, pts)
 
-        arr = np.array(points)
-        arr[:,0] -= min_x
-        arr[:,1] -= min_y
-        picture = np.zeros((size_x, size_y))
-        for p in arr:
-            picture[p[0], p[1]] = 1
-        print("\n",picture)
+    print(sky)
+
+#    print(pts)
+#    scipy.misc.imsave(name, picture)
+
 
 if __name__ == "__main__":
     main()
