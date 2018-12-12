@@ -29,10 +29,12 @@ def create_masks_from_text(body):
             temp |= to_num(c) << 4 - (i % 6)
     return masks
 
-def pull_out_plants(pots):
+def pull_out_plants(pots, length_difference):
     plants = 0
-    while pots:
-        plants += pots & 1
+    for i in range(pots.bit_length() - 1 -2, length_difference - 1 -4, -1):
+        if pots & 1:
+            plants += i
+            print(plants, i)#if pots & 1 else 0
         pots >>= 1
     return plants
 
@@ -43,34 +45,32 @@ def print_pots(pots):
         pots >>= 1
     print("".join(word[::-1]))
 
-def get_next_generation_based_on_mask(old_pots, m):
+def get_next_generation_based_on_mask(pots, m):
     new_pots = 0
-    pots = old_pots << 4 if (old_pots & 15 != 0) else old_pots
     for n in range(pots.bit_length()):
         if ((m[0] ^ (pots >> n)) & 31) == 0:
             new_pots |= m[1] << n
     return new_pots
 
-def predict_future_of_plants(pots, masks, generation):
-    total_plants = 0
+def predict_future_of_plants_better_this_time(pots, masks, generation):
     new_pots = 0
-
     for i in range(1, generation + 1):
         for m in masks:
+            pots = pots << 4 if (pots & 15 != 0) else pots
             new_pots |= get_next_generation_based_on_mask(pots, m)
         print_pots(new_pots)
+        if i == generation: total_plants = pull_out_plants(new_pots, pots.bit_length() - new_pots.bit_length())
         pots = new_pots
-        total_plants += pull_out_plants(new_pots)
         new_pots = 0
     print("Total plants in {} generations".format(generation), total_plants)
     return new_pots
 
 def main():
-    header, body = create_header_and_body_from_file("input")
+    header, body = create_header_and_body_from_file("input_test")
     pots = create_pots_from_header(header)
     masks = create_masks_from_text(body)
     generation = 20
-    new_pots = predict_future_of_plants(pots, masks, generation)
+    new_pots = predict_future_of_plants_better_this_time(pots, masks, generation)
 
 if __name__ == "__main__":
     main()
