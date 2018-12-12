@@ -34,6 +34,8 @@ def fill_the_sky(sky, points):
 def main():
     points, vels = create_points_and_velocities("input")
     points += 10080*vels # based on input size;)
+    # that's an ugly solution. Proper one would search for the minimal
+    # breadth of the points. Some day I'll improve it.
     for i in range(10):  # some int to iterate:P
         points += vels
         normalize_points(points)
